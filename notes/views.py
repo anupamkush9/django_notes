@@ -12,7 +12,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
-
+from django.views import View
 logger = logging.getLogger(__name__)
 
 
@@ -123,3 +123,13 @@ class SendMailApiView(APIView):
             except Exception as e:
                 return Response({"message": str(e)}, 400)
         return Response({"message": serializer.errors}, 400)
+
+class Home(View):
+    def get(self, request):
+        return HttpResponse('<h1>response from get method<h1>')
+    
+    def post(self, request):
+        return HttpResponse('<h1>RESponse from post method<h1>')
+    
+def index(request):
+    return render(request, 'notes/index.html')
