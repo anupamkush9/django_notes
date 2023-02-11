@@ -5,6 +5,13 @@ import pyrfc6266
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import Files, Temp_Data_Bulk_Create
+# Django imports
+from django.core.mail import send_mail
+from django.conf import settings
+# Rest Framework imports
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import serializers
 
 logger = logging.getLogger(__name__)
 
@@ -88,3 +95,31 @@ def bulk_create_test(request):
     # {"Time required": "0:00:01.975993"} for 100k using bulk create and list comprehension BS=50k
     # {"Time required": "0:00:19.443909"} for 1 Million using bulk create and list comprehension BS=50k
 
+
+class MailSerializer(serializers.Serializer):
+    subject = serializers.CharField(max_length=998)
+    message = serializers.CharField(max_length=10000)
+    recipient = serializers.EmailField()
+
+
+class SendMailApiView(APIView):
+
+    def send_gmail(self, subject, message, recipients):
+        send_mail(subject, message, settings.EMAIL_HOST_USER, recipients, fail_silently=False)
+        return None
+
+    def post(self, request):
+        data = request.data
+        print("sending mail...")
+        serializer = MailSerializer(data=data, many=False)
+        if serializer.is_valid():
+            print("validated")
+            try:
+                subject = data['subject']
+                message = data['message']
+                recipient = data['recipient']
+                self.send_gmail(subject, message, [recipient, ])
+                return Response({"message": "Mail sent successfully!"}, status=200)
+            except Exception as e:
+                return Response({"message": str(e)}, 400)
+        return Response({"message": serializer.errors}, 400)
