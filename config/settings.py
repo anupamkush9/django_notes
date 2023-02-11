@@ -59,16 +59,24 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
-# Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
+    "google": {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': ''
+        "APP": {
+            "client_id": os.getenv('CLIENT_ID'),
+            "secret": os.getenv('SECRET'),
+            "key": ""
+        },
+        # These are provider-specific settings that can only be
+        # listed here:
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
         }
     }
 }
@@ -180,24 +188,3 @@ LOGIN_REDIRECT_URL = 'home'
 #     os.path.join(SETTINGS_PATH, 'templates'),
 # )
 
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        "APP": {
-            "client_id": os.getenv('CLIENT_ID'),
-            "secret": os.getenv('SECRET'),
-            "key": ""
-        },
-        # These are provider-specific settings that can only be
-        # listed here:
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        }
-    }
-}
