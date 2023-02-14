@@ -2,7 +2,7 @@ import logging
 import requests
 import datetime
 import pyrfc6266
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .models import Files, Temp_Data_Bulk_Create
 # Django imports
@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 from django.views import View
+from .forms import Bookform
 logger = logging.getLogger(__name__)
 
 
@@ -126,10 +127,14 @@ class SendMailApiView(APIView):
 
 class Home(View):
     def get(self, request):
-        return HttpResponse('<h1>response from get method<h1>')
+        # return HttpResponse('<h1>response from get method<h1>')
+        return render(request, 'notes/home.html', {"form":Bookform})
     
     def post(self, request):
-        return HttpResponse('<h1>RESponse from post method<h1>')
+        form = Bookform(request.POST, request.FILES)
+        form.is_valid()
+        form.save()
+        return redirect('home')
     
 def index(request):
     return render(request, 'notes/index.html')

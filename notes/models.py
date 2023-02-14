@@ -17,5 +17,7 @@ class Temp_Data_Bulk_Create(models.Model):
     age = models.IntegerField(default=25)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
+class Book(models.Model):
+    photo = models.FileField(upload_to='book_picture', blank=True, null=True)
+    book_name = models.CharField(max_length=50)
 

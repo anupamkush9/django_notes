@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+<form action="/" method="post" enctype="multipart/form-data">
+    {% csrf_token %} 
+    {% comment %} <label for="fname">First name:</label><br>
+    <input type="text" id="fname" name="book_name"><br>
+    <label for="file">File:</label><br>
+    <input type="file" id="lname" name="photo"> {% endcomment %}
+    {{form.as_p}}
+    
+    <input type="submit" >
+  </form>
+</body>
+</html>
