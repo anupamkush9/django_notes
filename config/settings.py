@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     
     # custom app
     'notes',
+    'select_related_and_prefetch_related'
     
 ]
 
