@@ -15,6 +15,37 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     pagination_class = LimitOffsetPagination
 
+    def list(self, request, *args, **kwargs):
+        """
+            URL for list method : 127.0.0.1:8000/students/
+        """
+        return Response({"msg":"This is a msg from custom list method."})
+    
+    def create(self, request, *args, **kwargs):
+        """
+            URL for create method : 127.0.0.1:8000/students/
+        """
+        return Response({"msg":"This is a msg from custom create method."})
+    
+    def update(self, request, *args, **kwargs):
+        """
+            URL for Retrieve method : 127.0.0.1:8000/students/2/
+        """
+        return Response({"msg":"This is a msg from custom update method."})
+    
+    def retrieve(self, request, *args, **kwargs):
+        """
+            URL for Retrieve method : 127.0.0.1:8000/students/2
+        """
+        return Response({"msg":"This is a msg from custom retrieve method."})
+    
+    def delete(self, request, *args, **kwargs):
+        """
+            URL for delete method : 127.0.0.1:8000/students/
+        """
+        return Response({"msg":"This is a msg from custom delete method."})
+       
+
 
 """
 class StudentList(generics.ListCreateAPIView):
