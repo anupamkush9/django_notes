@@ -1,4 +1,6 @@
+import json
 import logging
+from redis import Redis
 import requests
 import datetime
 import pyrfc6266
@@ -148,3 +150,30 @@ class AnnotateCategory(View):
         for cat in category:
             final_string += f"<br><br>{cat.name} has {cat.no_of_prods} no_of_prods."
         return HttpResponse(str(s)+'\n'+final_string)
+
+class HeartBeatAPIVIEW(APIView):
+    def get(self, request):
+        redis_obj = Redis(host="127.0.0.1", port=6379)
+        response_data = ""
+        source = ""
+        response_data = redis_obj.get('resp')
+        if response_data:
+            # source = 'cache'
+            source = "Cache"
+            print("inside try block..")
+            return Response({"response_msg": json.loads(response_data), "source": source})
+        else:
+            # irs_object = CrawlerSettings.objects.filter(name="crawler_is_irs_tin_service_unavailable").first()
+            # updating in cache
+            cache_expiry_time = datetime.timedelta(minutes=1)
+            try:
+                redis_obj.set("resp", json.dumps({'status': "Message from database",
+                                            'last_updated': str(datetime.datetime.now())}), ex=cache_expiry_time)
+                response_data = "Response from server"
+                source = "Database"
+                print("Inside else block..")
+                return Response({"response_msg" : {"status" : response_data,'last_updated': str(datetime.datetime.now())},
+                                "source": source})
+            except Exception as e:
+                print('Exception in update_service_status_in_cache: ', e)
+        return Response({"response_msg": "some Thing went wrong", "source": source})
