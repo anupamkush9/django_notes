@@ -39,7 +39,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_KEY }}
-        source: "./*"
+        source: "/home/runner/work/django_notes/django_notes"
         target: "/home/ubuntu/app"
 
     - name: SSH into EC2 instance and restart server
