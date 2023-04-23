@@ -50,5 +50,4 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           sudo systemctl restart nginx
-          git pull origin dockerize-the-project-with-cors
           sudo docker compose up
