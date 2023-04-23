@@ -40,7 +40,7 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_KEY }}
         source: "./*"
-        target: "/django_notes"
+        target: "/home/ubuntu/app"
 
     - name: SSH into EC2 instance and restart server
       uses: appleboy/ssh-action@master
