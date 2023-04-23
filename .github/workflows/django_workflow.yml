@@ -53,4 +53,5 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           sudo systemctl restart nginx
+          cd /home/ubuntu/app
           sudo docker compose up
