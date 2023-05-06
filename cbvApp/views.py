@@ -51,7 +51,7 @@ class StudentViewSet(viewsets.ModelViewSet):
        
 def atomic_transaction_view(request):
     try:
-        with transaction.automic():
+        with transaction.atomic():
             """
                 If there is an error during either of these two save operations, 
                 the entire transaction will be rolled back and no changes will be made to the database.
@@ -63,7 +63,7 @@ def atomic_transaction_view(request):
             purchase.price = Decimal(10.00)
             customer.balance -= purchase.price
             customer.save()
-            purchase.item= 'qwerty' + 1234
+            purchase.item= 'qwerty'+65655
             purchase.save()
     except Exception as e:
         print("There is an error in atomic transaction view.",e)
