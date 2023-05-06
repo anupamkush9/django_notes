@@ -1,14 +1,18 @@
+from decimal import Decimal
 from django.shortcuts import render
 from cbvApp.models import Student
 from cbvApp.serializers import StudentSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from django.http import Http404
+from django.http import Http404, HttpResponse
 
 from rest_framework import generics,mixins
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
+from .models import Customer, Purchase
+from django.db import transaction
+
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -45,7 +49,26 @@ class StudentViewSet(viewsets.ModelViewSet):
         """
         return Response({"msg":"This is a msg from custom delete method."})
        
-
+def atomic_transaction_view(request):
+    try:
+        with transaction.automic():
+            """
+                If there is an error during either of these two save operations, 
+                the entire transaction will be rolled back and no changes will be made to the database.
+                This ensures that each purchase is consistent and that the customer's balance is always accurate
+            """
+            customer = Customer.objects.get(id=1)
+            purchase = Purchase()
+            purchase.customer   = customer
+            purchase.price = Decimal(10.00)
+            customer.balance -= purchase.price
+            customer.save()
+            purchase.item= 'qwerty' + 1234
+            purchase.save()
+    except Exception as e:
+        print("There is an error in atomic transaction view.",e)
+        
+    return HttpResponse("<h1>This is a msg from atomic transaction</h1>")
 
 """
 class StudentList(generics.ListCreateAPIView):
