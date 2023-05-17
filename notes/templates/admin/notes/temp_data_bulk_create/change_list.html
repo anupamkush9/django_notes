@@ -1,0 +1,30 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+{% block content %}
+{{ block.super }}
+
+
+<script>
+    (function ($) {
+         $(document).ready(function () {
+         console.log("Hi There!!!!!")
+        });
+        })(django.jQuery);
+        
+        
+        
+        
+   {% comment %} console.log("fghjk") {% endcomment %}
+   
+    {% comment %} $(document).ready(function () {
+        console.log("hiiiiiiiiiii")
+    })
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Hello, Admin!');
+    }); {% endcomment %}
+</script>
+{% endblock %}
+{% comment %} {% block admin_change_list_document_ready %}
+    {{ block.super }}
+
+{% endblock %} {% endcomment %}

@@ -7,6 +7,9 @@ class FilesAdmin(admin.ModelAdmin):
                 'https://code.jquery.com/jquery-3.6.1.min.js',
                 'js/FilesAdmin.js',  # project static folder
             )
+            css = (
+                  {"all" : ("css/custom_admin.css",),}
+            )
 
 # Register your models here
 admin.site.register(Files, FilesAdmin)

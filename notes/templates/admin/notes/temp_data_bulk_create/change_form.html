@@ -1,0 +1,30 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% block extrahead %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+    {{ block.super }}
+
+    <script>
+        (function ($) {
+             $(document).ready(function () {
+             console.log("Hi There!!!!!")
+            });
+            })(django.jQuery);
+            
+            
+            
+            
+       {% comment %} console.log("fghjk") {% endcomment %}
+       
+        {% comment %} $(document).ready(function () {
+            console.log("hiiiiiiiiiii")
+        })
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Hello, Admin!');
+        }); {% endcomment %}
+    </script>
+{% endblock %}
