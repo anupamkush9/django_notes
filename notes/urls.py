@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import ( HeartBeatAPIVIEW, download_file_on_the_go, webhook, bulk_create_test,
+from .views import ( HeartBeatAPIVIEW, download_file_on_the_go, feedback, webhook, bulk_create_test,
                     for_loop_create_test, SendMailApiView, Home, index,
                     AnnotateCategory )
 
@@ -12,7 +12,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     # path('/home', Home.as_view(), name="home"),
     path('', Home.as_view(), name="home"),
-    path('annotate/', AnnotateCategory.as_view(), name="home"),
+    path('annotate/', AnnotateCategory.as_view(), name="annotate"),
     path('heartbeat/', HeartBeatAPIVIEW.as_view(), name="heartbeat"),
+    path('feedback/', feedback, name='feedback'),
     
 ]
