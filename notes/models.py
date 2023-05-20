@@ -47,3 +47,15 @@ class Feedback(models.Model):
 
     def __str__(self):
         return self.name
+
+class Mobiles(models.Model):
+    name = models.CharField(max_length=100)
+    brand = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+    class Meta:
+        verbose_name = 'Mobile'
+        verbose_name_plural = 'Mobiles'
+
+    def __str__(self):
+        return self.name
