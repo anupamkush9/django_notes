@@ -184,7 +184,7 @@ class HeartBeatAPIVIEW(APIView):
 def feedback(request):
     form = FeedbackForm()
     if request.method == 'POST':
-        form = FeedbackForm(request.POST)
+        form = FeedbackForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('home')  # Redirect to a success page

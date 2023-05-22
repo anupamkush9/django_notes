@@ -4,7 +4,7 @@
   <h1 class="mb-4">Feedback</h1>
   <div class="row">
     <div class="col-md-6 offset-md-3">
-      <form method="post" action="{% url 'feedback' %}" class="needs-validation" novalidate>
+      <form method="post" enctype="multipart/form-data" action="{% url 'feedback' %}" class="needs-validation"  novalidate>
             {% csrf_token %}
             {% for field in form %}
                 <div class="mb-3">

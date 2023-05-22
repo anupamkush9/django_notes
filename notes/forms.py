@@ -10,16 +10,18 @@ class Bookform(forms.ModelForm):
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ['name', 'email', 'message']
+        fields = ['name', 'email', 'message', 'image']
         labels = {
             'name': 'Your Name',
             'email': 'Your Email',
             'message': 'Your Message',
+            'image': 'Your Image',
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your name'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'}),
             'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Enter your message'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
     def clean_name(self):
