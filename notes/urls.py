@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import ( HeartBeatAPIVIEW, create_mobile, custom_filter_view, download_file_on_the_go, feedback, webhook, bulk_create_test,
+from .views import ( HeartBeatAPIVIEW, create_mobile, custom_filter_view, custom_tag_view, download_file_on_the_go, feedback, webhook, bulk_create_test,
                     for_loop_create_test, SendMailApiView, Home, index,
                     AnnotateCategory )
 
@@ -17,5 +17,6 @@ urlpatterns = [
     path('feedback/', feedback, name='feedback'),
     path('without_forms/', create_mobile, name='create_mobile'),
     path('custom_filters/', custom_filter_view, name='custom_filters'),
+    path('custom_tags/', custom_tag_view, name='custom_tags'),
     
 ]
