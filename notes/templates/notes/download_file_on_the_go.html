@@ -1,0 +1,10 @@
+{% extends "notes/base.html" %}
+
+{% block content %}
+  <h1>Files</h1>
+  <ul>
+    {% for file in files %}
+      {{ loop.counter }}<li><a href="/download_file_on_the_go/{{ file.hash_id }}">{{ file.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

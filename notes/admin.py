@@ -6,6 +6,7 @@ class BookAdmin(admin.ModelAdmin):
     list_display = ['photo', 'book_name']
 
 class FilesAdmin(admin.ModelAdmin):
+        list_display = ['name', 'url', 'hash_id']
         class Media:
             js = (
                 'https://code.jquery.com/jquery-3.6.1.min.js',
