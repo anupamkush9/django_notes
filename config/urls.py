@@ -18,9 +18,17 @@ from django.urls import path, include
 from django.conf import settings
 # from . import settings
 from django.conf.urls.static import static
+
+from cbvApp import views
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register('students',views.StudentViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('notes.urls')),
+    path('', include(router.urls)),
 ]
 
 if settings.DEBUG:
