@@ -8,7 +8,7 @@ urlpatterns = [
     path('for_loop_create_test/', for_loop_create_test, name="for_loop_create_test"),
     path('send_mail/', SendMailApiView.as_view(), name="sendmail_view"),
     path('accounts/', include('allauth.urls')),
-    path('/home', Home.as_view(), name="home"),
-    path('', index, name="index"),
+    # path('/home', Home.as_view(), name="home"),
+    path('', Home.as_view(), name="home"),
     
 ]
