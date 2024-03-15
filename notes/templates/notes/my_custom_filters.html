@@ -1,0 +1,13 @@
+{% extends 'notes/base.html' %}
+{%load custom_filters%}
+
+{% block content %}
+<div>
+  <h1 class="mb-4">Custom Filter example page </h1>
+  <h3> Display First Char of Name : {{name|display_first_char}} </h3>
+  <h5> number1 : {{number1}} </h5>
+  <h5> number2 : {{number2}} </h5>
+  <h5>The sum of 2 context variable is : {{ number1|add_two_num:number2 }}</h5>
+  </div>
+
+{% endblock %}

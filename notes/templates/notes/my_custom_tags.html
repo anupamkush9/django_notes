@@ -1,0 +1,16 @@
+{% extends 'notes/base.html' %}
+{% load custom_tags %}
+
+{% block content %}
+<div>
+  <h1 class="mb-4">Custom Filter example page </h1>
+  <h3> Total no of objects : {% total_feedbacks %} </h3>
+  <h5> number1 : {{number1}} </h5>
+  <h5> number2 : {{number2}} </h5>
+  <h5> number3 : {{number3}} </h5>
+  <h5> ==============================</h5>
+  <h5> sum of 3 number is {% add_values number1 number2 number3 %} </h5>
+
+  </div>
+
+{% endblock %}

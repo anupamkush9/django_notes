@@ -211,6 +211,15 @@ def feedback(request):
     return render(request, 'notes/feedback.html', {'form': form})
 
 
+def custom_filter_view(request):
+    context = {"number1": 10, "number2":20, "number3":30, "name":"Anupam"}
+    return render(request, 'notes/my_custom_filters.html', context)
+
+def custom_tag_view(request):
+    context = {"number1": 10, "number2":20, "number3":30, "name":"Anupam"}
+    return render(request, 'notes/my_custom_tags.html', context)
+
+
 
 from django.shortcuts import render, redirect
 from .models import Mobiles
