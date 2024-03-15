@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-9b0losxwu+r&^k$fg#v3vwxs%vqj1_b#43(l8q=2#0e7=(he6e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     
     # custom app
     'notes',
-    
+    'select_related_and_prefetch_related',
+    'cbvApp',
+    "corsheaders",
 ]
 
 SITE_ID = 1
@@ -84,6 +86,7 @@ SOCIALACCOUNT_PROVIDERS = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -158,6 +161,8 @@ USE_TZ = True
 STATICFILES_DIRS = [BASE_DIR / 'static',]
 STATIC_URL = 'static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT =  os.path.join(BASE_DIR,'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -190,3 +195,27 @@ LOGIN_REDIRECT_URL = 'home'
 #     os.path.join(SETTINGS_PATH, 'templates'),
 # )
 
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS_ALLOW_HEADERS = [
+#     "accept",
+#     "accept-encoding",
+#     "authorization",
+#     "content-type",
+#     "dnt",
+#     "origin",
+#     "user-agent",
+#     "x-csrftoken",
+#     "x-requested-with",
+# ]
+
+# CORS_ALLOW_METHODS = [
+#     "DELETE",
+#     "GET",
+#     "OPTIONS",
+#     "PATCH",
+#     "POST",
+#     "PUT",
+# ]

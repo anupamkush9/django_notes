@@ -1,10 +1,13 @@
+import json
 import logging
+from redis import Redis
 import requests
 import datetime
 import pyrfc6266
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .models import Files, Temp_Data_Bulk_Create
+from .models import Files, Temp_Data_Bulk_Create, Category
+from django.db.models import Count
 # Django imports
 from django.core.mail import send_mail
 from django.conf import settings
@@ -13,6 +16,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 from django.views import View
+from .forms import Bookform
 logger = logging.getLogger(__name__)
 
 
@@ -126,10 +130,50 @@ class SendMailApiView(APIView):
 
 class Home(View):
     def get(self, request):
-        return HttpResponse('<h1>response from get method<h1>')
+        # return HttpResponse('<h1>response from get method<h1>')
+        return render(request, 'notes/home.html', {"form":Bookform})
     
     def post(self, request):
-        return HttpResponse('<h1>RESponse from post method<h1>')
+        form = Bookform(request.POST, request.FILES)
+        form.is_valid()
+        form.save()
+        return redirect('home')
     
 def index(request):
     return render(request, 'notes/index.html')
+
+class AnnotateCategory(View):
+    def get(self, request):
+        category = Category.objects.annotate(no_of_prods=Count('product'))
+        s = category.query
+        final_string = ''
+        for cat in category:
+            final_string += f"<br><br>{cat.name} has {cat.no_of_prods} no_of_prods."
+        return HttpResponse(str(s)+'\n'+final_string)
+
+class HeartBeatAPIVIEW(APIView):
+    def get(self, request):
+        redis_obj = Redis(host="127.0.0.1", port=6379)
+        response_data = ""
+        source = ""
+        response_data = redis_obj.get('resp')
+        if response_data:
+            # source = 'cache'
+            source = "Cache"
+            print("inside try block..")
+            return Response({"response_msg": json.loads(response_data), "source": source})
+        else:
+            # irs_object = CrawlerSettings.objects.filter(name="crawler_is_irs_tin_service_unavailable").first()
+            # updating in cache
+            cache_expiry_time = datetime.timedelta(minutes=1)
+            try:
+                redis_obj.set("resp", json.dumps({'status': "Message from database",
+                                            'last_updated': str(datetime.datetime.now())}), ex=cache_expiry_time)
+                response_data = "Response from server"
+                source = "Database"
+                print("Inside else block..")
+                return Response({"response_msg" : {"status" : response_data,'last_updated': str(datetime.datetime.now())},
+                                "source": source})
+            except Exception as e:
+                print('Exception in update_service_status_in_cache: ', e)
+        return Response({"response_msg": "some Thing went wrong", "source": source})
