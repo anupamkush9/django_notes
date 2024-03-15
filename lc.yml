@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+
+  web_app:
+    build: .
+    command: python3.8 manage.py runserver 0.0.0.0:8000
+    volumes: [.:/backend_api]
+    # ports: ["7000:7000"]
+
+  nginx_service_port_80:
+    image: nginx
+    volumes: [./my_custom_ngnix_conf_file:/etc/nginx/conf.d]
+    depends_on:
+      - web_app
+    ports: ["8000:8000"]
+
+
+#docker compose -f lc.yml up --scale web_app=5
+#docker compose -f lc.yml up build
+#docker compose -f lc.yml up
+
+# curl localhost:8000/students/  
+# for getting the response from the server.
