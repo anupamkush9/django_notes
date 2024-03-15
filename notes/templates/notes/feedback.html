@@ -1,0 +1,27 @@
+{% extends 'notes/base.html' %}
+
+{% block content %}
+  <h1 class="mb-4">Feedback</h1>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <form method="post" enctype="multipart/form-data" action="{% url 'feedback' %}" class="needs-validation"  novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+                
+                {% if field.errors %}
+                    <li class="text-danger">
+                        {% for error in field.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </li>
+                {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

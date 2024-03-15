@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from django.views import View
 from .forms import Bookform
+from .forms import FeedbackForm
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -193,3 +194,17 @@ class HeartBeatAPIVIEW(APIView):
             except Exception as e:
                 print('Exception in update_service_status_in_cache: ', e)
         return Response({"response_msg": "some Thing went wrong", "source": source})
+
+
+def feedback(request):
+    form = FeedbackForm()
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Redirect to a success page
+        try:
+            print(form.errors)
+        except:
+            pass
+    return render(request, 'notes/feedback.html', {'form': form})
