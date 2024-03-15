@@ -18,6 +18,7 @@ from rest_framework import serializers
 from django.views import View
 from .forms import Bookform
 from .forms import FeedbackForm
+from .models import Mobiles
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -208,3 +209,46 @@ def feedback(request):
         except:
             pass
     return render(request, 'notes/feedback.html', {'form': form})
+
+
+
+from django.shortcuts import render, redirect
+from .models import Mobiles
+
+def create_mobile(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        brand = request.POST.get('brand')
+        price = request.POST.get('price')
+        image = request.FILES.get('image')  # Get the uploaded image file
+        form = {
+            'name': name,
+            'brand': brand,
+            'price': price
+        }
+        errors = {}
+
+        if not name:
+            errors['name'] = 'Name is required.'
+        if not brand:
+            errors['brand'] = 'Brand is required.'
+        if not price:
+            errors['price'] = 'Price is required.'
+        if not image:
+            errors['image'] = 'Image is required.'
+
+        if Mobiles.objects.filter(name=name).exists():
+            errors['name'] = 'Mobile with the same name already exists.'
+
+        if errors:
+            context = {
+                'form': form,
+                'errors': errors
+            }
+            return render(request, 'notes/without_foams.html', context)
+        else:
+            Mobiles.objects.create(name=name, brand=brand, price=price, image=image)  # Save the image field
+            return redirect('home')
+    else:
+        context = {}
+        return render(request, 'notes/without_foams.html', context)

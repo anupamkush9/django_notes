@@ -1,0 +1,37 @@
+{% extends 'notes/base.html' %}
+
+{% block content %}
+  <h1>Create Mobile</h1>
+  <form method="post" action="{% url 'create_mobile' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_name">Name:</label>
+      <input type="text" name="name" id="id_name" class="form-control" value="{{ form.name }}" >
+      {% if errors.name %}
+        <div class="text-danger">{{ errors.name }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="id_brand">Brand:</label>
+      <input type="text" name="brand" id="id_brand" class="form-control" value="{{ form.brand }}" >
+      {% if errors.brand %}
+        <div class="text-danger">{{ errors.brand }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="id_price">Price:</label>
+      <input type="number" name="price" id="id_price" class="form-control" value="{{ form.price }}" required>
+      {% if errors.price %}
+        <div class="text-danger">{{ errors.price }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="id_image">Image:</label>
+      <input type="file" name="image" id="id_image" class="form-control" accept="image/*" required>
+      {% if errors.image %}
+        <div class="text-danger">{{ errors.image }}</div>
+      {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+  </form>
+{% endblock %}
