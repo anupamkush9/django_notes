@@ -1,13 +1,25 @@
+import json
 import logging
+from redis import Redis
 import requests
 import datetime
 import pyrfc6266
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .models import Files, Temp_Data_Bulk_Create
-from rest_framework.response import Response
+from .models import Files, Temp_Data_Bulk_Create, Category
+from django.db.models import Count
+# Django imports
+from django.core.mail import send_mail
+from django.conf import settings
+# Rest Framework imports
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import serializers
+from django.views import View
+from .forms import Bookform
+from rest_framework.response import Response
 from rest_framework import status
+
 logger = logging.getLogger(__name__)
 
 
@@ -103,3 +115,81 @@ def bulk_create_test(request):
     # {"Time required": "0:00:01.975993"} for 100k using bulk create and list comprehension BS=50k
     # {"Time required": "0:00:19.443909"} for 1 Million using bulk create and list comprehension BS=50k
 
+
+class MailSerializer(serializers.Serializer):
+    subject = serializers.CharField(max_length=998)
+    message = serializers.CharField(max_length=10000)
+    recipient = serializers.EmailField()
+
+
+class SendMailApiView(APIView):
+
+    def send_gmail(self, subject, message, recipients):
+        send_mail(subject, message, settings.EMAIL_HOST_USER, recipients, fail_silently=False)
+        return None
+
+    def post(self, request):
+        data = request.data
+        print("sending mail...")
+        serializer = MailSerializer(data=data, many=False)
+        if serializer.is_valid():
+            print("validated")
+            try:
+                subject = data['subject']
+                message = data['message']
+                recipient = data['recipient']
+                self.send_gmail(subject, message, [recipient, ])
+                return Response({"message": "Mail sent successfully!"}, status=200)
+            except Exception as e:
+                return Response({"message": str(e)}, 400)
+        return Response({"message": serializer.errors}, 400)
+
+class Home(View):
+    def get(self, request):
+        # return HttpResponse('<h1>response from get method<h1>')
+        return render(request, 'notes/home.html', {"form":Bookform})
+    
+    def post(self, request):
+        form = Bookform(request.POST, request.FILES)
+        form.is_valid()
+        form.save()
+        return redirect('home')
+    
+def index(request):
+    return render(request, 'notes/index.html')
+
+class AnnotateCategory(View):
+    def get(self, request):
+        category = Category.objects.annotate(no_of_prods=Count('product'))
+        s = category.query
+        final_string = ''
+        for cat in category:
+            final_string += f"<br><br>{cat.name} has {cat.no_of_prods} no_of_prods."
+        return HttpResponse(str(s)+'\n'+final_string)
+
+class HeartBeatAPIVIEW(APIView):
+    def get(self, request):
+        redis_obj = Redis(host="127.0.0.1", port=6379)
+        response_data = ""
+        source = ""
+        response_data = redis_obj.get('resp')
+        if response_data:
+            # source = 'cache'
+            source = "Cache"
+            print("inside try block..")
+            return Response({"response_msg": json.loads(response_data), "source": source})
+        else:
+            # irs_object = CrawlerSettings.objects.filter(name="crawler_is_irs_tin_service_unavailable").first()
+            # updating in cache
+            cache_expiry_time = datetime.timedelta(minutes=1)
+            try:
+                redis_obj.set("resp", json.dumps({'status': "Message from database",
+                                            'last_updated': str(datetime.datetime.now())}), ex=cache_expiry_time)
+                response_data = "Response from server"
+                source = "Database"
+                print("Inside else block..")
+                return Response({"response_msg" : {"status" : response_data,'last_updated': str(datetime.datetime.now())},
+                                "source": source})
+            except Exception as e:
+                print('Exception in update_service_status_in_cache: ', e)
+        return Response({"response_msg": "some Thing went wrong", "source": source})

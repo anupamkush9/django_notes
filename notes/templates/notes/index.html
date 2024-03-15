@@ -1,0 +1,12 @@
+{% load account %}
+{% load socialaccount %}
+{% providers_media_js %}
+<html>
+    <style type="text/css"></style>
+
+    <body>
+        {{user}}
+        <h1> This is the Home page </h1>
+        <a href="{% provider_login_url "google" %}">Login with Google account</a>
+    </body>
+</html>
