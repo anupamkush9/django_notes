@@ -27,6 +27,8 @@ router.register('students',views.StudentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('atomic_tranction_view/', views.atomic_transaction_view),
+
     path('', include('notes.urls')),
     path('', include(router.urls)),
 ]
