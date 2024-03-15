@@ -1,0 +1,18 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% block extrahead %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+    {{ block.super }}
+
+    <script>
+        (function ($) {
+             $(document).ready(function () {
+             console.log("Hi There!!!!!")
+            });
+            })(django.jQuery);  
+    </script>
+{% endblock %}

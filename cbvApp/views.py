@@ -1,4 +1,5 @@
 from decimal import Decimal
+import socket
 from django.shortcuts import render
 from cbvApp.models import Student
 from cbvApp.serializers import StudentSerializer
@@ -23,7 +24,8 @@ class StudentViewSet(viewsets.ModelViewSet):
         """
             URL for list method : 127.0.0.1:8000/students/
         """
-        return Response({"msg":"This is a msg from custom list method."})
+        return Response({"msg":"This is a msg from custom list method.",
+                         "host": socket.gethostname()})
     
     def create(self, request, *args, **kwargs):
         """
