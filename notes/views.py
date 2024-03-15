@@ -18,6 +18,8 @@ from rest_framework import serializers
 from django.views import View
 from .forms import Bookform
 from .forms import FeedbackForm
+from rest_framework.response import Response
+from rest_framework import status
 
 logger = logging.getLogger(__name__)
 
@@ -47,20 +49,33 @@ def download_file_on_the_go(request, id):
     return response
 
 
-def webhook(request):
-    # internal api
-    url = 'https://www.boredapi.com/api/activity'
-    response = requests.get(url)
+class webhookApiView(APIView):
 
-    print(response.json())
+    def post(self, request):
+        '''
+        curl --location '127.0.0.1:8000/notes/webhook/' \
+            --header 'Content-Type: application/json' \
+            --data '{
+                "webhook_urls": "https://webhook.site/09b75120-f3a6-4cd9-bfd9-33c0040dfbf2"
+            }'
+        '''
+        # internal api
+        url = 'https://www.boredapi.com/api/activity'
+        response = requests.get(url)
 
-    # webhook api
-    webhook_url = 'https://webhook.site/d2174683-f508-462c-8eae-0e4b94dc90c1'
-    requests.post(webhook_url, json=response.json())
+        print(response.json())
 
-    print("success")
+        # webhook api
+        webhook_urls = request.data.get('webhook_urls')
+        if not webhook_urls:
+            return Response({'error': 'webhook_urls is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    return HttpResponse("<h1 style='color: green; font= '>Success</h1>")
+        requests.post(webhook_urls, json=response.json())
+
+        print("success")
+        
+        return Response(response.json(), status=status.HTTP_201_CREATED)
+
 
 
 def for_loop_create_test(request):
