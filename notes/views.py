@@ -1,4 +1,4 @@
-import json
+import json, os
 import logging
 from redis import Redis
 import requests
@@ -25,28 +25,45 @@ from rest_framework import status
 logger = logging.getLogger(__name__)
 
 
-def download_file_on_the_go(request, id):
+def list_files(request):
+    files = Files.objects.all()
+    return render(request, 'notes/download_file_on_the_go.html', {'files': files})
+
+def get_url_by_hash_id(hash_id):
+    try:
+        files = Files.objects.all()
+        for file in files:
+            if file.hash_id == hash_id:
+                return file.url, file.name
+        return None
+    except Files.DoesNotExist:
+        return None
+
+def download_file_on_the_go(request, hash_id):
     """
     file url => https://www.some-website.com/url-to-destination-file
     encoded url => https://www.my-website.com/<uuid>
 
-    The objective of this function to encode urls and provide files on the go
+    The objective of this function is to encode URLs and provide files on the go
     """
-    logger.warning("hello world")
-    # url = "https://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf"
-    # url = "https://www.businessregistry.gr/downloadFile/index?key=assemblyDecision&elementId=3113977"
-    url = "https://file-examples.com/storage/fe863385e163e3b0f92dc53/2017/10/file_example_JPG_100kB.jpg"#Files.objects.filter(id=id).first().url
-
-    file = requests.get(url)
+    url, name = get_url_by_hash_id(hash_id)
     try:
-        file_name = pyrfc6266.requests_response_to_filename(file)
-        logger.info("File name: ", str(file))
+        response = requests.get(url)
+        content_type = response.headers.get('content-type')
+        if content_type == 'application/pdf':
+            file_ext = 'pdf'
+        elif content_type == 'text/html':
+            file_ext = 'html'
+        else:
+            file_ext = 'html'
+        file_name = f"{name}.{file_ext}"
     except Exception as e:
         file_name = str(datetime.datetime.now())
-        logger.warning("Exception while getting file name: ", str(e))
-    response = HttpResponse(file)
+        logger.warning("Exception while getting file name: " + str(e))
+    
+    response = HttpResponse(content=response.content)
     response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
-    response['Content-Type'] = "application/octet-stream"
+    response['Content-Type'] = content_type
     return response
 
 

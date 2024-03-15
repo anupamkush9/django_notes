@@ -1,5 +1,5 @@
 from django.db import models
-
+import hashlib
 
 # Create your models here.
 class Files(models.Model):
@@ -8,8 +8,27 @@ class Files(models.Model):
     age = models.IntegerField(default=25)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def hash_id(self):
+        # Create an instance of the SHA-256 hash object
+        sha256_hash = hashlib.sha256()
+
+        # Convert the entity_number and fileurl to bytes
+        hash_data = f"{self.name}".encode('utf-8')
+
+        # Update the hash object with the data
+        sha256_hash.update(hash_data)
+
+        # Get the hexadecimal representation of the hash digest
+        hash_result = sha256_hash.hexdigest()
+
+        return hash_result
+
     class Meta:
         verbose_name_plural = "Files"
+
+    def str(self):
+        return self.name
 
 class Temp_Data_Bulk_Create(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True, default="")
