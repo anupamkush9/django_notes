@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import ( HeartBeatAPIVIEW, create_mobile, custom_filter_view, custom_tag_view, download_file_on_the_go, feedback, list_files, webhook, bulk_create_test,
                     for_loop_create_test, SendMailApiView, Home, index,
-                    AnnotateCategory )
+                    AnnotateCategory, webhookApiView )
 
 urlpatterns = [
     path('download_file_on_the_go/<str:hash_id>', download_file_on_the_go, name='download_file_on_the_go'),

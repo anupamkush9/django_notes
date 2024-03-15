@@ -12,6 +12,18 @@ class FilesAdmin(admin.ModelAdmin):
                 'https://code.jquery.com/jquery-3.6.1.min.js',
                 'js/FilesAdmin.js',  # project static folder
             )
+            css = (
+                  {"all" : ("css/custom_admin.css",),}
+            )
+# class BookAdmin(admin.ModelAdmin):
+#     list_display = ['photo', 'book_name']
+
+class FilesAdmin(admin.ModelAdmin):
+        class Media:
+            js = (
+                'https://code.jquery.com/jquery-3.6.1.min.js',
+                'js/FilesAdmin.js',  # project static folder
+            )
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', ]
