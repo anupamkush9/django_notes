@@ -4,7 +4,8 @@ import datetime
 import pyrfc6266
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .models import Files, Temp_Data_Bulk_Create
+from .models import Files, Temp_Data_Bulk_Create, Category
+from django.db.models import Count
 # Django imports
 from django.core.mail import send_mail
 from django.conf import settings
@@ -138,3 +139,12 @@ class Home(View):
     
 def index(request):
     return render(request, 'notes/index.html')
+
+class AnnotateCategory(View):
+    def get(self, request):
+        category = Category.objects.annotate(no_of_prods=Count('product'))
+        s = category.query
+        final_string = ''
+        for cat in category:
+            final_string += f"<br><br>{cat.name} has {cat.no_of_prods} no_of_prods."
+        return HttpResponse(str(s)+'\n'+final_string)
