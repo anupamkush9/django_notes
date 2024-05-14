@@ -1,12 +1,12 @@
 from django.urls import path, include
-from .views import ( HeartBeatAPIVIEW, create_mobile, custom_filter_view, custom_tag_view, download_file_on_the_go, feedback, list_files, webhook, bulk_create_test,
+from .views import ( HeartBeatAPIVIEW, create_mobile, custom_filter_view, custom_tag_view, download_file_on_the_go, feedback, list_files, bulk_create_test,
                     for_loop_create_test, SendMailApiView, Home, index,
                     AnnotateCategory, webhookApiView )
 
 urlpatterns = [
     path('download_file_on_the_go/<str:hash_id>', download_file_on_the_go, name='download_file_on_the_go'),
     path('list_files/', list_files, name='list_files'),
-    path('webhook/', webhook, name='webhook'),
+    # path('webhook/', webhook, name='webhook'),
     path('bulk_create_test/', bulk_create_test, name="bulk_create_test"),
     path('for_loop_create_test/', for_loop_create_test, name="for_loop_create_test"),
     path('send_mail/', SendMailApiView.as_view(), name="sendmail_view"),
