@@ -1,0 +1,36 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% block extrahead %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <h1> welcome to change_form page </h1>
+     <h1> value received from backend : <h2 id="h2_id"></h2> </h1>
+     <h1> value received from backend by id: <h1 id="h1_id"></h1> </h1>
+
+    <script>
+            (function ($) {
+                $(document).ready(function () {
+                console.log("Hi There!!!!!")
+    
+                fetch('/admin/notes/book/bookprice')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        document.getElementById('h2_id').innerHTML = data.price;
+                    });
+    
+    
+                fetch('/admin/notes/book/bookprice_by_id/2')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        document.getElementById('h1_id').innerHTML = data.price;
+                    });
+    
+                });
+            })(django.jQuery);
+
+    </script>
+{% endblock %}

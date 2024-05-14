@@ -1,9 +1,28 @@
 from django.contrib import admin
 from .models import *
 from django import forms
+from django.contrib.auth.decorators import login_required
+from django.urls import path
+from django.http import JsonResponse
 
 class BookAdmin(admin.ModelAdmin):
     list_display = ['photo', 'book_name']
+    
+    def get_urls(self):
+        urls = [
+                path('bookprice', login_required(self.get_book_price, login_url="/admin/login/"), name='book_price'),
+                path('bookprice_by_id/<int:id>', login_required(self.get_book_price_by_id, login_url="/admin/login/"), name='get_book_price_by_id'),
+            ]+super().get_urls()
+        return urls
+
+    def get_book_price(self, request):
+        price = 12
+        return JsonResponse({'price': price})
+
+    def get_book_price_by_id(self, request, id):
+        price = int(id)*4
+        return JsonResponse({'price': price})
+
 
 class FilesAdmin(admin.ModelAdmin):
         list_display = ['name', 'url', 'hash_id']
