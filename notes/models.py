@@ -57,6 +57,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def prefix_name(self):
+        return f"The {self.name}"
+    
+    @property
+    def name_first_char(self):
+        return self.name[0]
 
 class Feedback(models.Model):
     name = models.CharField(max_length=100)

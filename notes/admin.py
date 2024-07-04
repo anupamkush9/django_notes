@@ -77,10 +77,23 @@ class productsAdminForm(forms.ModelForm):
 class ProductAdmin(admin.ModelAdmin):
     # below we have override the form which is defined in parent class.
     form = productsAdminForm
-    list_display = ['name', ]
+    list_display = ['name', 'prefix_name', 'price', 'name_first_char']
 
     # we can override save model method from here by overriding below method.
     # def save_model(self, request, obj, form, change):
+
+
+class DiscountedProduct(Product):
+    class Meta:
+        proxy = True
+
+    def discounted_price(self):
+        return self.price * 0.5
+
+
+class DiscountedProductAdmin(admin.ModelAdmin):
+    list_display = ['name', 'discounted_price', 'price', 'prefix_name', 'name_first_char']
+
 
 # Register your models here
 admin.site.register(Files, FilesAdmin)
@@ -90,3 +103,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Feedback)
 admin.site.register(Mobiles)
+admin.site.register(DiscountedProduct, DiscountedProductAdmin)
