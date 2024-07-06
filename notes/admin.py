@@ -94,6 +94,10 @@ class DiscountedProduct(Product):
 class DiscountedProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'discounted_price', 'price', 'prefix_name', 'name_first_char']
 
+    # def has_module_permission(self, request):
+    #     # Return False to hide the model from the admin index page
+    #     return False
+
 
 # Register your models here
 admin.site.register(Files, FilesAdmin)
