@@ -1,4 +1,4 @@
-# Project Book Index
+# Project Repositories Index
 
 ## Django_notes 1
   1. [Atomicity_concept_in_django](https://github.com/anupamkush9/django_notes/tree/Atomicity_concept_in_django)
