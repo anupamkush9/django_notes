@@ -278,3 +278,21 @@ def create_mobile(request):
     else:
         context = {}
         return render(request, 'notes/without_foams.html', context)
+
+class FileDownloadApi(APIView):
+    
+    def get(self, request):
+        file_url = "https://morth.nic.in/sites/default/files/dd12-13_0.pdf"
+        try:
+            response = requests.get(file_url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        content_type = response.headers.get('Content-Type', 'application/octet-stream')
+        file_name = file_url.split("/")[-1]
+        
+        file_response = HttpResponse(response.content, content_type=content_type)
+        file_response['Content-Disposition'] = f'attachment; filename={file_name}'
+        
+        return file_response
