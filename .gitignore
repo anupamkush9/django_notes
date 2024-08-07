@@ -29,8 +29,8 @@ staticfiles/
 # for ignoring local_settings.py file at any level which is used for specifying local_setting for development
 local_settings.py
 
-# for ignoring db.sqlite3 db and should be uncommented before deployemt
-**db.sqlite3
+# for ignoring db.sqlite3 db across the project and should be uncommented before deployemt
+# db.sqlite3
 
 # for ignoring locally generated .db file
 *.db
