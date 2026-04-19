@@ -28,8 +28,6 @@ def download_file_on_the_go(request, id):
     The objective of this function to encode urls and provide files on the go
     """
     logger.warning("hello world")
-    # url = "https://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf"
-    # url = "https://www.businessregistry.gr/downloadFile/index?key=assemblyDecision&elementId=3113977"
     url = "https://file-examples.com/storage/fe863385e163e3b0f92dc53/2017/10/file_example_JPG_100kB.jpg"#Files.objects.filter(id=id).first().url
 
     file = requests.get(url)
@@ -163,7 +161,6 @@ class HeartBeatAPIVIEW(APIView):
             print("inside try block..")
             return Response({"response_msg": json.loads(response_data), "source": source})
         else:
-            # irs_object = CrawlerSettings.objects.filter(name="crawler_is_irs_tin_service_unavailable").first()
             # updating in cache
             cache_expiry_time = datetime.timedelta(minutes=1)
             try:
