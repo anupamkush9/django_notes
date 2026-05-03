@@ -198,7 +198,6 @@ class HeartBeatAPIVIEW(APIView):
             print("inside try block..")
             return Response({"response_msg": json.loads(response_data), "source": source})
         else:
-            # irs_object = CrawlerSettings.objects.filter(name="crawler_is_irs_tin_service_unavailable").first()
             # updating in cache
             cache_expiry_time = datetime.timedelta(minutes=1)
             try:
